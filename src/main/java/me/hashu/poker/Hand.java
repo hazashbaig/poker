@@ -52,23 +52,25 @@ public class Hand {
     }
 
     private boolean isStraight() {
-        int maxRank = this.cards.stream()
+        List<Rank> sortedRanks = this.cards.stream()
                 .map(Card::getRank)
-                .max(Comparator.comparing(Rank::getValue))
-                .map(Rank::getValue)
-                .orElseThrow(NoSuchElementException::new);
+                .sorted(Comparator.comparing(Rank::getValue))
+                .collect(Collectors.toList());
 
-        int minRank = this.cards.stream()
-                .map(Card::getRank)
-                .min(Comparator.comparing(Rank::getValue))
-                .map(Rank::getValue)
-                .orElseThrow(NoSuchElementException::new);
+        Rank minRank = sortedRanks.get(0);
+        Rank maxRank = sortedRanks.get(sortedRanks.size() - 1);
 
         long numUnique = this.cards.stream()
                 .distinct()
                 .count();
 
-        return ((maxRank - minRank) == 4) && (numUnique == 5);
+        // Ace can be 1 or 14
+        if (minRank == Rank.ACE && maxRank == Rank.KING) {
+            // treat Ace as 14 in this case
+            return sortedRanks.equals(Arrays.asList(Rank.ACE, Rank.TEN, Rank.JACK, Rank.QUEEN, Rank.KING));
+        }
+
+        return ((maxRank.getValue() - minRank.getValue()) == 4) && (numUnique == 5);
     }
 
     private boolean isFlush() {

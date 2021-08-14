@@ -14,14 +14,28 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 public class UnitTest {
     @Test
-    @DisplayName("check straight flush")
-    void checkStraightFlush() {
+    @DisplayName("check straight flush with Ace=1")
+    void checkStraightFlushWithMinorAce() {
         Hand hand = new Hand(Arrays.asList(
+                new Card(Rank.ACE, Suit.DIAMOND),
+                new Card(Rank.TWO, Suit.DIAMOND),
+                new Card(Rank.THREE, Suit.DIAMOND),
                 new Card(Rank.FOUR, Suit.DIAMOND),
-                new Card(Rank.FIVE, Suit.DIAMOND),
-                new Card(Rank.SIX, Suit.DIAMOND),
-                new Card(Rank.SEVEN, Suit.DIAMOND),
-                new Card(Rank.EIGHT, Suit.DIAMOND)
+                new Card(Rank.FIVE, Suit.DIAMOND)
+        ));
+
+        assertThat(hand.getHandName()).isEqualTo(HandName.STRAIGHT_FLUSH);
+    }
+
+    @Test
+    @DisplayName("check straight flush with Ace=14")
+    void checkStraightFlushWithMajorAce() {
+        Hand hand = new Hand(Arrays.asList(
+                new Card(Rank.ACE, Suit.DIAMOND),
+                new Card(Rank.KING, Suit.DIAMOND),
+                new Card(Rank.QUEEN, Suit.DIAMOND),
+                new Card(Rank.JACK, Suit.DIAMOND),
+                new Card(Rank.TEN, Suit.DIAMOND)
         ));
 
         assertThat(hand.getHandName()).isEqualTo(HandName.STRAIGHT_FLUSH);
