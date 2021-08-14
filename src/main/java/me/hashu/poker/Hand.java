@@ -113,6 +113,6 @@ public class Hand {
 
     @Override
     public String toString() {
-        return "Hand{" + cards + '}';
+        return String.format("Hand{name=%s, cards=%s}", handName, cards);
     }
 }
